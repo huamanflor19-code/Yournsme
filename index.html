@@ -2,26 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChatBot IA Gemini</title>
+  <title>Chat IA - Ji</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <h2>🤖 ChatBot Gemini</h2>
-    </div>
-    <div id="chat-box" class="chat-box">
-      <!-- Aquí se verán los mensajes -->
-    </div>
-    <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Escribe un mensaje...">
-      <input type="file" id="file-input" hidden>
-      <button id="file-btn">📎</button>
-      <button id="send-btn">➤</button>
-    </div>
+  <div class="container">
+    <h1>Chat con IA</h1>
+    <div id="chat-box"></div>
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Escribe tu mensaje..." autocomplete="off" required>
+      <button type="submit">Enviar</button>
+    </form>
   </div>
-
-  <script src="script.js"></script>
+  <footer>
+    <p>Powered by GitHub Pages & NVIDIA AI</p>
+  </footer>
+  <script src="chat.js"></script>
 </body>
 </html>
