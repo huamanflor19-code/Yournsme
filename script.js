@@ -4,7 +4,7 @@ const sendBtn = document.getElementById("send-btn");
 const fileBtn = document.getElementById("file-btn");
 const fileInput = document.getElementById("file-input");
 
-// 🔑 API Key de Gemini (solo para pruebas privadas, no subir público)
+// 🔑 API Key de Gemini (solo para pruebas privadas, no lo subas público)
 const API_KEY = "AIzaSyDGOEA2AtjXUCKmO45RLr3t535438aFFsk";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 
@@ -33,15 +33,24 @@ async function getBotResponse(userMessage) {
       })
     });
 
+    // Si no responde bien la API
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+
     const data = await response.json();
     console.log("Gemini response:", data);
 
-    const botReply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ No entendí la respuesta.";
+    // Extraer respuesta del modelo
+    const botReply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "⚠️ La IA no devolvió respuesta.";
+
     addMessage(botReply, "bot");
 
   } catch (error) {
     console.error("Error con la API:", error);
-    addMessage("❌ Error al conectar con la IA.", "bot");
+    addMessage("❌ Error al conectar con Gemini.", "bot");
   }
 }
 
