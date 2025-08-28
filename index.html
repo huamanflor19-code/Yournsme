@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Y.0 Web</title>
+  <title>Chat con Y.0 (WebSocket)</title>
 </head>
 <body>
   <h1>Chat con Y.0</h1>
@@ -11,22 +11,31 @@
   <pre id="output"></pre>
 
   <script>
-    async function sendMessage() {
+    // Conectar al WebSocket del servidor
+    const ws = new WebSocket("ws://10.243.227.204:8080/completion");
+    ws.onopen = () => console.log("✅ Conectado al servidor");
+    ws.onerror = (err) => console.error("❌ Error WebSocket:", err);
+    ws.onclose = () => console.log("❌ Conexión cerrada");
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.content && data.content[0]) {
+        document.getElementById("output").textContent += data.content[0].text;
+      }
+      if (data.stop) {
+        document.getElementById("output").textContent += "\n--- Fin de respuesta ---\n";
+      }
+    };
+
+    function sendMessage() {
       const msg = document.getElementById("input").value;
-      document.getElementById("output").textContent = "⏳ Esperando respuesta...";
+      document.getElementById("output").textContent = "⏳ Esperando respuesta...\n";
 
-      const res = await fetch("http://10.243.227.204:8080/completion", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: msg,
-          n_predict: 200,
-          stream: false
-        })
-      });
-
-      const data = await res.json();
-      document.getElementById("output").textContent = data.content[0].text;
+      ws.send(JSON.stringify({
+        prompt: msg,
+        n_predict: 200,
+        stream: true
+      }));
     }
   </script>
 </body>
