@@ -15,14 +15,16 @@
       const msg = document.getElementById("input").value;
       document.getElementById("output").textContent = "⏳ Esperando respuesta...";
 
-      const res = await fetch("http://10.243.227.204:8080", {
+      const res = await fetch("http://10.243.227.204:8080/completion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: msg,
-          n_predict: 200
+          n_predict: 200,
+          stream: false
         })
       });
+
       const data = await res.json();
       document.getElementById("output").textContent = data.content[0].text;
     }
