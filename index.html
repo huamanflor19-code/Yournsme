@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Chat IA - Ji</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <title>Y.0 Web</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Chat con IA</h1>
-    <div id="chat-box"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Escribe tu mensaje..." autocomplete="off" required>
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
-  <footer>
-    <p>Powered by GitHub Pages & NVIDIA AI</p>
-  </footer>
-  <script src="chat.js"></script>
+  <h1>Chat con Y.0</h1>
+  <textarea id="input" rows="4" cols="50" placeholder="Escribe tu mensaje..."></textarea><br>
+  <button onclick="sendMessage()">Enviar</button>
+  <pre id="output"></pre>
+
+  <script>
+    async function sendMessage() {
+      const msg = document.getElementById("input").value;
+      document.getElementById("output").textContent = "⏳ Esperando respuesta...";
+
+      const res = await fetch("http://10.243.227.204:8080", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: msg,
+          n_predict: 200
+        })
+      });
+      const data = await res.json();
+      document.getElementById("output").textContent = data.content[0].text;
+    }
+  </script>
 </body>
 </html>
