@@ -1,42 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>Chat con Y.0 (WebSocket)</title>
+  <meta charset="UTF-8">
+  <title>Generación de Imágenes con Gemini</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    #output { margin-top: 20px; }
+    img { max-width: 80%; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+  </style>
 </head>
 <body>
-  <h1>Chat con Y.0</h1>
-  <textarea id="input" rows="4" cols="50" placeholder="Escribe tu mensaje..."></textarea><br>
-  <button onclick="sendMessage()">Enviar</button>
-  <pre id="output"></pre>
+  <h1>Generación de Imágenes con Gemini</h1>
+  <input type="text" id="prompt" placeholder="Escribe tu descripción aquí" size="50">
+  <button onclick="generateImage()">Generar Imagen</button>
+  
+  <div id="output"></div>
 
-  <script>
-    // Conectar al WebSocket del servidor
-    const ws = new WebSocket("ws://10.243.227.204:8080/completion");
-    ws.onopen = () => console.log("✅ Conectado al servidor");
-    ws.onerror = (err) => console.error("❌ Error WebSocket:", err);
-    ws.onclose = () => console.log("❌ Conexión cerrada");
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.content && data.content[0]) {
-        document.getElementById("output").textContent += data.content[0].text;
-      }
-      if (data.stop) {
-        document.getElementById("output").textContent += "\n--- Fin de respuesta ---\n";
-      }
-    };
-
-    function sendMessage() {
-      const msg = document.getElementById("input").value;
-      document.getElementById("output").textContent = "⏳ Esperando respuesta...\n";
-
-      ws.send(JSON.stringify({
-        prompt: msg,
-        n_predict: 200,
-        stream: true
-      }));
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
